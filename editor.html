@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+
+  <!-- Include external CSS. -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet"
+    type="text/css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.css">
+  <link rel="stylesheet" href="estilo.css">
+
+  <!-- Include Editor style. -->
+  <link href="https://cdn.jsdelivr.net/npm/froala-editor@2.9.3/css/froala_editor.pkgd.min.css" rel="stylesheet"
+    type="text/css" />
+  <link href="https://cdn.jsdelivr.net/npm/froala-editor@2.9.3/css/froala_style.min.css" rel="stylesheet"
+    type="text/css" />
+
+
+</head>
+
+<body>
+  <!-- Create a tag that we will use as the editable area. -->
+  <!-- You can use a div tag as well. -->
+  <h1>Painel</h1>
+  <p class="opcoes">
+    <label for="horario">Horário: </label><select id="horario">
+      <option value="6.30">06:30</option>
+      <option value="7.00">07:00</option>
+      <option value="7.30">07:30</option>
+      <option value="8.00">08:00</option>
+      <option value="8.30">08:30</option>
+      <option value="9.00">09:00</option>
+      <option value="9.30">09:30</option>
+      <option value="10.00">10:00</option>
+      <option value="10.30">10:30</option>
+      <option value="11.00">11:00</option>
+      <option value="11.30">11:30</option>
+      <option value="12.00">12:00</option>
+      <option value="12.30">12:30</option>
+      <option value="13.00">13:00</option>
+      <option value="13.30">13:30</option>
+      <option value="14.00">14:00</option>
+      <option value="14.30">14:30</option>
+      <option value="15.00">15:00</option>
+      <option value="15.30">15:30</option>
+      <option value="16.00">16:00</option>
+      <option value="16.30">16:30</option>
+      <option value="17.00">17:00</option>
+      <option value="17.30">17:30</option>
+      <option value="18.00">18:00</option>
+      <option value="18.30">18:30</option>
+      <option value="19.00">19:00</option>
+      <option value="19.30">19:30</option>
+      <option value="20.00">20:00</option>
+      <option value="20.30">20:30</option>
+      <option value="21.00">21:00</option>
+      <option value="21.30">21:30</option>
+      <option value="22.00">22:00</option>
+      <option value="22.30">22:30</option>
+      <option value="23.00">23:00</option>
+      <option value="23.30">23:30</option>
+      <option value="default">Padrão</option>
+    </select>
+      <!--&nbsp;<input type="checkbox" name="ativo"><label for="ativo">Ativo</label>-->
+
+  </p>
+  <!--<p class="opcoes">
+    <button onclick="apagar_tudo()">Apagar tudo</button>
+  </p>-->
+  <div id="froala-editor">
+
+  </div>
+
+  <!-- Include external JS libs. -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js">
+  </script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/xml/xml.min.js">
+  </script>
+
+  <!-- Include Editor JS files. -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@2.9.3/js/froala_editor.pkgd.min.js">
+  </script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@2.9.3/js/plugins/align.min.js">
+  </script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@2.9.3/js/plugins/paragraph.min.js">
+  </script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/froala-editor@2.9.3/js/languages/pt_br.js"></script>
+
+  <!-- Initialize the editor. -->
+  <script>
+    var html_editor = undefined;
+    $.FroalaEditor.DefineIcon('save', {
+      NAME: 'save'
+    });
+    $.FroalaEditor.RegisterCommand('save', {
+      title: 'Salvar',
+      focus: false,
+      undo: false,
+      refreshAfterCallback: false,
+      callback: function () {
+        $.ajax({
+          url: 'post.php',
+          method: 'post',
+          data: {
+            'horario': $('#horario option:selected').val(),
+            'html': this.html.get()
+          }
+        })
+        console.log(this.html.get());
+        console.log($('#horario option:selected'))
+      }
+    });
+
+    $(function () {
+      $('#froala-editor').froalaEditor({
+        language: 'pt_br',
+        toolbarButtons: ['save', '|', 'undo', 'redo', '|', 'fontSize', 'color', 'bold', 'italic', 'underline', 'strikeThrough',
+          'subscript', 'superscript', 'outdent', 'indent', '|', 'paragraphFormat', 'paragraphStyle', 'align', 'clearFormatting', 'insertTable', 'html',
+          'left'
+        ]
+      })
+    });
+    $('#horario').change(function () {
+      var h = this;
+      $.ajax({
+        url: 'conteudo.php',
+        data: {
+          'horario': this.value
+        },
+        success: function (data) {
+          console.log($('#froala-editor').froalaEditor('html.set', data))
+        }
+      });
+    })
+  </script>
+</body>
+
+</html>

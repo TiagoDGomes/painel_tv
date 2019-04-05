@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="estilo.css">  
+  <link href="https://cdn.jsdelivr.net/npm/froala-editor@2.9.3/css/froala_style.min.css" rel="stylesheet"
+    type="text/css" />
+  <style>
+    #conteudo{
+      padding: 5px;
+      background-color: white;
+    } 
+    body{
+      background-color: black;
+    } 
+  </style>
+  <script>
+    var request = null;
+
+    function createRequest() {
+      try {
+        request = new XMLHttpRequest();
+      } catch (trymicrosoft) {
+        try {
+          request = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (othermicrosoft) {
+          try {
+            request = new ActiveXObject("Microsoft.XMLHTTP");
+          } catch (failed) {
+            request = null;
+          }
+        }
+      }
+
+      if (request == null)
+        console.log("Error creating request object!");
+    }
+
+    function getConteudo() {
+      createRequest();
+      var url = "conteudo_atual.php";
+      request.open("GET", url, true);
+      request.onreadystatechange = atualizaPagina;
+      request.send(null);
+    }
+
+    function atualizaPagina() {
+      if (request.readyState == 4) {
+        document.getElementById('conteudo').innerHTML = request.responseText;
+      }
+    }
+    setInterval(getConteudo, 5000)
+  </script>
+</head>
+
+<body>
+<div id="conteudo" class="fr-view">
+
+</div>
+</body>
+
+</html>

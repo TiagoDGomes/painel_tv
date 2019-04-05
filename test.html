@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script>
+        var cal_id = 'emetb45f4qa2sqgigcflc6h29k';
+        var api_key = 'AIzaSyCX9hM0cfJ4jC5GmVussujt1G9RieE4j_E';
+        $.ajax({
+            url: "https://www.googleapis.com/calendar/v3/calendars/" + cal_id + "/events?key=" + api_key,
+            success: function (data) {
+                console.log(data);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <div id="conteudo" class="fr-view"></div>
+
+</body>
+
+</html>
